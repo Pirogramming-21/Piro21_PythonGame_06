@@ -2,8 +2,8 @@ import os
 import sys
 
 def line_print():
-    columns, _ = os.get_terminal_size() # 터미널 너비 
-    print("~" * columns) # 터미널 너비만큼 ~ 출력
+    columns, _ = os.get_terminal_size() # 터미널 너비
+    print("~" * columns)
 
 ### 1. 게임 시작 / 인트로 / 진행할까요? (y/n) ###
 line_print()
@@ -21,3 +21,6 @@ while True:
         sys.exit() # 전체 코드 강제종료
     else:
         print('잘못된 입력입니다. 다시 입력해주세요.')
+
+### 2. 사용자 이름 받기 ###
+name = input('당신의 이름은?: ')
