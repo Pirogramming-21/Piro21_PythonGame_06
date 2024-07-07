@@ -81,6 +81,8 @@ def game_5(players):
                     cnt += 1
                     player = next_player
 
+        # 여기 코드가 너무 더럽다고 생각하지 않는지~...
+
         # 으악!
         right = (player + 1) % len(players)
         left = (player - 1 + len(players)) % len(players)
@@ -89,29 +91,31 @@ def game_5(players):
         # 컴퓨터 틀릴 확률
         failure = random.randint(1, 100)
 
-        # 으악!
+        # 나 으악! 할거양~
         if scream:
             print(f"{player_names[0]}: 으악! ヽ༼⊙_⊙༽ﾉ")
             # 내가 오른쪽이면?
             if right == 0:
+                # 근데 컴퓨터가 실수할지도 몰랑!
                 if failure > 80:
-                    left = random.choice(
+                    left_fail = random.choice(
                         [x for x in range(0, len(players)) if x not in [left, right]]
                     )
-                    print(f"{player_names[left]}: 으악! ヽ༼⊙_⊙༽ﾉ")
-                    print(f"{player_names[left]} 땡!")
-                    return player_names[left]
+                    print(f"{player_names[left_fail]}: 으악! ヽ༼⊙_⊙༽ﾉ")
+                    print(f"{player_names[left_fail]} 땡!")
+                    return player_names[left_fail]
                 else:
                     print(f"{player_names[left]}: 으악! ヽ༼⊙_⊙༽ﾉ")
             # 내가 왼쪽이면?
             elif left == 0:
+                # 컴퓨터 실수 확률 추가
                 if failure > 80:
-                    right = random.choice(
+                    right_fail = random.choice(
                         [x for x in range(0, len(players)) if x not in [left, right]]
                     )
-                    print(f"{player_names[right]}: 으악! ヽ༼⊙_⊙༽ﾉ")
-                    print(f"{player_names[right]} 땡!")
-                    return player_names[right]
+                    print(f"{player_names[right_fail]}: 으악! ヽ༼⊙_⊙༽ﾉ")
+                    print(f"{player_names[right_fail]} 땡!")
+                    return player_names[right_fail]
                 else:
                     print(f"{player_names[right]}: 으악! ヽ༼⊙_⊙༽ﾉ")
             # 둘 다 아니면?
@@ -123,7 +127,7 @@ def game_5(players):
             if right == 0 or left == 0:
                 print(f"{player_names[0]} 땡!")
                 return players[0]
-
+            # 컴퓨터 실수 33
             ind = random.randint(0, 1)
             if failure > 80:
                 if ind == 0:
