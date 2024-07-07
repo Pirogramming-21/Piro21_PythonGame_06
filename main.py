@@ -80,34 +80,116 @@ def game_1(players): # 베스킨라빈스
     print('베스킨라빈스')
 
     # 플레이어 2~4명. index[0]이 실제 플레이어. 나머지는 컴퓨터.
-    loser = random.choice(players) # 실제로는 random 대신 게임에서 진 사람 선택!
+    loser = random.choice(players)  # 실제로는 random 대신 게임에서 진 사람 선택!
     return loser
 
-def game_2(players): # 좋아 게임
+
+def game_2(players):  # 좋아 게임
     print('GAME START')
     print('좋아 게임')
-    
-    loser = random.choice(players) # 실제로는 random 대신 게임에서 진 사람 선택!
-    return loser
-    
 
-def game_3(players, my_name): # 고백점프
+    loser = random.choice(players)  # 실제로는 random 대신 게임에서 진 사람 선택!
+    return loser
+
+
+def game_3(players, user_name):
     print('GAME START')
     print('고백점프')
-    loser = random.choice(players) # 실제로는 random 대신 게임에서 진 사람 선택!
-    return loser
 
-def game_4(players): # 369 게임
+    def contains_369(num):
+        """Check if a number contains 3, 6, or 9"""
+        return any(d in '369' for d in str(num))
+
+    def get_gobackjump_response(num):
+        """Get the correct response for a number containing 3, 6, or 9"""
+        if num % 3 == 0:
+            return "고"
+        elif num % 6 == 0:
+            return "백"
+        else:
+            return "점프"
+
+    def next_player(current_index, step=1):
+
+        return (current_index + step) % len(players)
+
+    # Find the index of the user_name in players
+    current_index = next(i for i, player in enumerate(players) if player[0] == user_name)
+    count = 1
+
+    while True:
+        current_player = players[current_index][0]
+        print(f'{current_player}의 차례입니다! ({count})')
+        computer_response = ""
+        if contains_369(count):
+            correct_response = get_gobackjump_response(count)
+            if current_player == user_name:
+                user_response = input(f'{count}에는 뭐라고 대답해야 할까요? (고/백/점프): ').strip()
+
+                # 사용자가 고, 백, 점프 중 하나를 입력했는지 확인
+                if user_response not in ["고", "백", "점프"]:
+                    print("다른거를 말해서 게임 아웃입니다ㅏ!!!.")
+                    loser = players[current_index]
+
+                    return loser  # 게임 종료: 잘못된 입력
+
+
+
+            else:
+                # 컴퓨터 플레이어의 임의 응답
+                responses = ["고", "백", "점프", "3", "9", "11", "6", "15"]
+                computer_response = random.choice(responses)
+                print(f'{current_player}이(가) {computer_response}이라고 대답했습니다.')
+                a=current_player
+                if computer_response.isdigit():
+                    print(f'오답입니다! {a}이(가) {correct_response} 대신 {computer_response}이라고 했습니다.')
+                    loser = players[current_index]
+                    return loser  # 게임 종료
+
+            # 다음 플레이어 결정
+            if computer_response == "고" or user_response == "고":
+                current_index = next_player(current_index)
+            elif computer_response == "백" or user_response == "백":
+                players.reverse()
+                current_index = next_player(current_index - 1)
+
+            elif computer_response == "점프" or user_response == "점프":
+                current_index = next_player(current_index, 2)
+        else:
+            if current_player == user_name:
+                user_response = input(f'{current_player}, 답을(를) 외쳐주세요: ').strip()
+                a=current_player
+                if user_response != str(count):
+                    print(f'오답입니다! {a}이(가) {count} 대신 {user_response}이라고 했습니다.')
+                    loser = players[current_index]
+                    return loser  # 게임 종료
+            else:
+                print(f'{current_player}이(가) {count}을(를) 외쳤습니다!')
+
+            current_index = next_player(current_index)
+
+        count += 1
+
+        # 플레이어 순서 출력
+        print("현재 순서:", " -> ".join(player[0] for player in players[current_index:] + players[:current_index]))
+
+        if count > 100:  # 임시 조건: 무한 루프 방지
+            break
+
+
+def game_4(players):  # 369 게임
     print('GAME START')
     print('369 게임')
-    loser = random.choice(players) # 실제로는 random 대신 게임에서 진 사람 선택!
+    loser = random.choice(players)  # 실제로는 random 대신 게임에서 진 사람 선택!
     return loser
 
-def game_5(players): # 두부 게임
+
+def game_5(players):  # 두부 게임
     print('GAME START')
     print('두부 게임')
-    loser = random.choice(players) # 실제로는 random 대신 게임에서 진 사람 선택!
+    loser = random.choice(players)  # 실제로는 random 대신 게임에서 진 사람 선택!
     return loser
+
 
 def playing_game(game_index, players):
     games = [game_1, game_2, game_3, game_4, game_5]
