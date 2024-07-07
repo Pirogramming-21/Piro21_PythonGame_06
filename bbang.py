@@ -1,5 +1,3 @@
-# players 사용하시면 list 정보가 있고
-# 마지막에 loser 리턴해야합니다
 import time
 import random
 import os
