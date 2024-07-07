@@ -27,7 +27,7 @@ def current_status(players):
 
 def alcohol_game_list():
     print('''~~~~~~~~~~~~~~~~~~~  🍺 오늘의 Alcohol GAME 🍺  ~~~~~~~~~~~~~~~~~~~~~
-                     🍺 1. 베스킨~라빈스~ 31🍦 
+                     🍺 1. 더 게임 오브 데스 💀
                      🍺 2. 💕좋아 게임
                      🍺 3. GO BACK JUMP!
                      🍺 4. 3-6-9 게임
@@ -47,7 +47,7 @@ def random_game_com(player):
     return random_index
 
 def random_game_player(player):
-    name = player[0]
+    name = player[0][0]
     while True:
         try: 
             game_index = int(input(f'{name}(이)가 좋아하는 랜덤 게임~ 랜덤 게임~ 무슨 게임? : '))
@@ -75,12 +75,90 @@ def ask_if_continue():
 ## 플레이어 목록 : players --> players[0]은 실제 사용자, 나머지는 AI
 ## 게임 종료 시 return loser --> players[i]의 형식으로 패배자 플레이어 1명 선택할 것.
 
-def game_1(players): # 베스킨라빈스
-    print('GAME START')
-    print('베스킨라빈스')
+def game_1(players): # 더 게임 오브 데스
+    def select_targets(players):
+        targets = {}
+        players_name = [player[0] for player in players]
+        
+        for player in players:
+            if player == players[0]:
+                while True:
+                    avaliable_targets_name = [name for name in players_name if name != player[0]]
+                    print(f'~~~~~~~~~~   🎯  지목 가능한 플레이어 목록: {avaliable_targets_name}  ~~~~~~~~~~')
+                    target = input(f"                  ✅ 누구를 지목할건가요? : ")
+                    if target in avaliable_targets_name:
+                        line_print()
+                        break
+                    else:
+                        print("올바른 플레이어를 선택해주세요.")
+            else:
+                avaliable_targets_name = players_name[:]
+                avaliable_targets_name.remove(player[0])
+                target = random.choice(avaliable_targets_name)
+            
+            targets[player[0]] = target
+            print(f"                         {player[0]}   👉   {target}")
+        
+        line_print()
+        return targets
 
+<<<<<<< HEAD
     # 플레이어 2~4명. index[0]이 실제 플레이어. 나머지는 컴퓨터.
     loser = random.choice(players)  # 실제로는 random 대신 게임에서 진 사람 선택!
+=======
+    def move_count():
+        while True:
+            try:
+                moves = int(input("                  ✅ 몇 번 이동할까요? (2 이상 15 이하): "))
+                if 2 <= moves <= 15:
+                    print(f'\n   🎯  {moves} 번 이동합니다!')
+                    line_print()
+                    return moves
+                else:
+                    print("2에서 15 사이의 숫자를 입력해주세요.")
+            except ValueError:
+                print("숫자를 입력해주세요.")
+
+    def pass_bomb(players, targets, moves):
+        current_holder = random.choice(players)[0]
+        print(f"\n   🍺  {current_holder} 부터 시작합니다!\n\n")
+        time.sleep(1)
+        
+        for i in range(moves):
+            next_holder = targets[current_holder]
+            remaining_moves = moves - (i + 1)
+            print(f"💣 {i + 1}번째 !! |  {current_holder}   👉   {next_holder}  |  남은 횟수 ...{remaining_moves}")
+            print('')
+            current_holder = next_holder
+            time.sleep(1)
+        
+        print(f'.\n.\n.\n')
+        time.sleep(1)
+
+        print("🤯  🤯  🤯  당첨!!  🤯  🤯  🤯")
+
+        time.sleep(1)
+        line_print()
+        return current_holder
+
+    def play_game(players):
+        targets = select_targets(players)
+        moves = move_count()
+        
+        loser = pass_bomb(players, targets, moves)
+        
+        print(f"\n🍺 패배자는~~~~~~ ✨ {loser} ✨ !!")
+        return loser
+    
+    # 게임 실행
+    print('\n           ₍₍ ◝(・ω・)◟ ⁾⁾     아 신난다~🤩')
+    time.sleep(0.5)
+    print('           아 재미난다~😍     ₍₍ ◝(・ω・)◟ ⁾⁾')
+    time.sleep(0.5)
+    print('              💀 더 게임 오브 데스! 💀   \n')
+    time.sleep(0.5)
+    loser = play_game(players)
+>>>>>>> feature/SH
     return loser
 
 
@@ -450,6 +528,10 @@ def main():
                     print(f'{player[0]}이(가) 전사했습니다... 꿈나라에서는 편히 쉬시길..zzz')
                     everyone_alive = False
                     break
+            
+            # 치사량 도달 시 랜덤게임 종료
+            if not everyone_alive:
+                break
 
     line_print()
     print('                     🍺 다음에 술마시면 또 불러주세요~ 안녕! 🍺')
