@@ -7,7 +7,7 @@ players = []
 games = []
 
 def wait():
-    time.sleep(0.2)
+    time.sleep(0.3)
 
 def line_print():
     columns, _ = os.get_terminal_size() # 터미널 너비
@@ -47,7 +47,8 @@ def random_game_com(player):
     return random_index
 
 def random_game_player(player):
-    name = player[0][0]
+    name = player[0]
+    alcohol_game_list()
     while True:
         try: 
             game_index = int(input(f'{name}(이)가 좋아하는 랜덤 게임~ 랜덤 게임~ 무슨 게임? : '))
@@ -155,7 +156,7 @@ def game_1(players): # 더 게임 오브 데스
     return loser
 
 
-def game_2(players):  
+def game_2(players):  # 좋아 게임
     print('GAME START')
     print('좋아 게임')
 
@@ -166,15 +167,16 @@ def game_2(players):
         return (turn + 1) % len(players)
 
     while True:
-        current_player = players[turn][0]  
+        current_player = players[turn]
+        current_player_name = current_player[0]  
         complimented_index = random.randint(0, len(players) - 1)  
 
-        while current_player == players[complimented_index][0]:
+        while current_player_name == players[complimented_index][0]:
             complimented_index = random.randint(0, len(players) - 1)
 
         complimented = players[complimented_index][0]  
 
-        print(f"{current_player}: {complimented} 좋아!")
+        print(f"{current_player_name}: {complimented} 좋아!")
 
         if complimented == players[0][0]:  
             response = input(f'{complimented}, 답변을 선택하세요 ("나도 좋아" 또는 "캌 퉤"): ').strip()
@@ -188,7 +190,7 @@ def game_2(players):
         if response == "캌 퉤":
             reject_count += 1
             if reject_count >= 3:
-                print(f"{current_player}가 술을 마십니다! 🍻")
+                print(f"{current_player_name}가 술을 마십니다! 🍻")
                 return current_player  
         else:
             reject_count = 0
@@ -198,7 +200,7 @@ def game_2(players):
         line_print()
 
 
-def game_3(players, user_name):
+def game_3(players, user_name): # 고백점프
     print('GAME START')
     print('고백점프')
 
@@ -484,17 +486,12 @@ def main():
     current_status(players)
     wait()
 
-    # 게임 리스트 출력
-
-    alcohol_game_list()
-    wait()
-
-
     ### 5. 게임 선택 및 실행 ###
 
 
     # 게임 선택
-    game_index = random_game_player(players)
+    player_me = players[0]
+    game_index = random_game_player(player_me)
 
     # 게임 실행
     playing_game(game_index, players)
@@ -533,6 +530,10 @@ def main():
                 game_index = random_game_com(player)
 
             playing_game(game_index, players)
+
+            print('### TEST ### ')
+            print(players)
+
             current_status(players)
 
             # 치사량 도달 시 엔딩
