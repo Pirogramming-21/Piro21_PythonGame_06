@@ -3,6 +3,7 @@ import sys
 import random
 import time
 
+
 def wait():
     time.sleep(0.2)
 
@@ -69,7 +70,9 @@ def ask_if_continue():
     else:
         pass
 
-## 게임 목록
+## 게임 목록 - 각자 게임 만든 후 삽입하기
+## 플레이어 목록 : players --> players[0]은 실제 사용자, 나머지는 AI
+## 게임 종료 시 return loser --> players[i]의 형식으로 패배자 플레이어 1명 선택할 것.
 
 def game_1(): # 베스킨라빈스
     print('GAME START')
@@ -83,6 +86,7 @@ def game_1(): # 베스킨라빈스
 def game_2(): # 좋아 게임
     print('GAME START')
     print('좋아 게임')
+    
     loser = random.choice(players) # 실제로는 random 대신 게임에서 진 사람 선택!
     return loser
     
