@@ -116,23 +116,22 @@ def game_1(players): # 더 게임 오브 데스
                 print("숫자를 입력해주세요.")
 
     def pass_bomb(players, targets, moves):
-        current_holder = random.choice(players)[0]
-        print(f"\n   🍺  {current_holder} 부터 시작합니다!\n\n")
+        current_holder = random.choice(players)
+        current_holder_name = current_holder[0]
+        print(f"\n   🍺  {current_holder_name} 부터 시작합니다!\n\n")
         time.sleep(1)
         
         for i in range(moves):
-            next_holder = targets[current_holder]
+            next_holder = targets[current_holder_name]
             remaining_moves = moves - (i + 1)
-            print(f"💣 {i + 1}번째 !! |  {current_holder}   👉   {next_holder}  |  남은 횟수 ...{remaining_moves}")
+            print(f"💣 {i + 1}번째 !! |  {current_holder_name}   👉   {next_holder}  |  남은 횟수 ...{remaining_moves}")
             print('')
-            current_holder = next_holder
+            current_holder_name = next_holder
             time.sleep(1)
         
         print(f'.\n.\n.\n')
-        time.sleep(1)
-
+        wait()
         print("🤯  🤯  🤯  당첨!!  🤯  🤯  🤯")
-
         time.sleep(1)
         line_print()
         return current_holder
@@ -140,10 +139,9 @@ def game_1(players): # 더 게임 오브 데스
     def play_game(players):
         targets = select_targets(players)
         moves = move_count()
-        
         loser = pass_bomb(players, targets, moves)
-        
-        print(f"\n🍺 패배자는~~~~~~ ✨ {loser} ✨ !!")
+        print(f"\n🍺 패배자는~~~~~~ ✨ {loser[0]} ✨ !!\n")
+        time.sleep(1)
         return loser
     
     # 게임 실행
@@ -529,7 +527,6 @@ def main():
         # 랜덤게임 실시 코드
         for player in player_order:
             if player == players[0]:
-                ask_if_continue()
                 game_index = random_game_player(player)
             else:
                 ask_if_continue()
