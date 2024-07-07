@@ -70,9 +70,10 @@ def game_5(players):
                         [x for x in ppang_list if x != ppang_list[cnt]]
                     )
                     print(f"{player_names[player]}: {answer}")
-                    print(f"{player_names[next_player]}을/를 가르켰습니다!")
+                    if answer != "으악!":
+                        print(f"{player_names[next_player]}을/를 가르켰습니다!")
                     print(f"{player_names[player]} 땡!")
-                    return players[cnt]
+                    return players[player]
                 # 성공 확률 80%
                 else:
                     print(f"{player_names[player]}: {ppang_list[cnt]}")
@@ -85,15 +86,34 @@ def game_5(players):
         left = (player - 1 + len(players)) % len(players)
         scream = player_scream()
 
+        # 컴퓨터 틀릴 확률
+        failure = random.randint(1, 100)
+
         # 으악!
         if scream:
             print(f"{player_names[0]}: 으악! ヽ༼⊙_⊙༽ﾉ")
             # 내가 오른쪽이면?
             if right == 0:
-                print(f"{player_names[left]}: 으악! ヽ༼⊙_⊙༽ﾉ")
+                if failure > 80:
+                    left = random.choice(
+                        [x for x in range(0, len(players)) if x not in [left, right]]
+                    )
+                    print(f"{player_names[left]}: 으악! ヽ༼⊙_⊙༽ﾉ")
+                    print(f"{player_names[left]} 땡!")
+                    return player_names[left]
+                else:
+                    print(f"{player_names[left]}: 으악! ヽ༼⊙_⊙༽ﾉ")
             # 내가 왼쪽이면?
             elif left == 0:
-                print(f"{player_names[right]}: 으악! ヽ༼⊙_⊙༽ﾉ")
+                if failure > 80:
+                    right = random.choice(
+                        [x for x in range(0, len(players)) if x not in [left, right]]
+                    )
+                    print(f"{player_names[right]}: 으악! ヽ༼⊙_⊙༽ﾉ")
+                    print(f"{player_names[right]} 땡!")
+                    return player_names[right]
+                else:
+                    print(f"{player_names[right]}: 으악! ヽ༼⊙_⊙༽ﾉ")
             # 둘 다 아니면?
             else:
                 print(f"{player_names[0]} 땡!")
@@ -104,17 +124,29 @@ def game_5(players):
                 print(f"{player_names[0]} 땡!")
                 return players[0]
 
-            failure = random.randint(1, 100)
             ind = random.randint(0, 1)
             if failure > 80:
                 if ind == 0:
+                    left = random.choice(
+                        [x for x in range(0, len(players)) if x not in [left, right, 0]]
+                    )
                     print(f"{player_names[left]}: 으악! ヽ༼⊙_⊙༽ﾉ")
                     print(f"{player_names[left]} 땡!")
+                    return players[left]
                 else:
+                    right = random.choice(
+                        [x for x in range(0, len(players)) if x not in [left, right, 0]]
+                    )
                     print(f"{player_names[right]}: 으악! ヽ༼⊙_⊙༽ﾉ")
                     print(f"{player_names[right]} 땡!")
+                    return players[right]
+
+            else:
+                print(f"{player_names[left]}: 으악! ヽ༼⊙_⊙༽ﾉ")
+                print(f"{player_names[right]}: 으악! ヽ༼⊙_⊙༽ﾉ")
+
         cnt = 0
 
 
-players = [("은서", 10), ("하연", 10), ("연서", 10)]
+players = [("가가", 10), ("나나", 10), ("다다", 10)]
 loser = game_5(players)
