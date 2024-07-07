@@ -1,32 +1,41 @@
-import random
+def game_2(players):  
+    print('GAME START')
+    print('좋아 게임')
 
-class JowaGame:
-    def __init__(self):
-        self.players = []
-        self.turn = 0
-        self.reject_count = 0
+    turn = 0  
+    reject_count = 0  
 
-    def next_turn(self):
-        self.turn = (self.turn + 1) % len(self.players)
+    def next_turn(turn, players):
+        return (turn + 1) % len(players)
 
-    def compliment(self, complimented, response):
-        if complimented not in self.players:
-            print(f"{complimented}는 게임에 없습니다.")
-            return
+    while True:
+        current_player = players[turn][0]  
+        complimented_index = random.randint(0, len(players) - 1)  
 
-        initiator = self.players[self.turn]
-        print(f"{initiator} : {complimented} 좋아!")
+        while current_player == players[complimented_index][0]:
+            complimented_index = random.randint(0, len(players) - 1)
+
+        complimented = players[complimented_index][0]  
+
+        print(f"{current_player}: {complimented} 좋아!")
+
+        if complimented == players[0][0]:  
+            response = input(f'{complimented}, 답변을 선택하세요 ("나도 좋아" 또는 "캌 퉤"): ').strip()
+            if response not in ["나도 좋아", "캌 퉤"]:
+                print('잘못된 입력입니다. "나도 좋아" 또는 "캌 퉤" 중 하나를 입력해주세요.')
+                continue
+        else:  
+            response = random.choice(["나도 좋아", "캌 퉤"])
+            print(f'{complimented}: {response}')
 
         if response == "캌 퉤":
-            print(f"{complimented} : {response} 😂")
-            self.reject_count += 1
-            if self.reject_count >= 3:
-                print(f"{initiator}가 술을 마십니다! 🍻")
-                return True
-            
+            reject_count += 1
+            if reject_count >= 3:
+                print(f"{current_player}가 술을 마십니다! 🍻")
+                return current_player  
         else:
-            print(f"{complimented} : 나도 좋아! 😊")
-            self.reject_count = 0
-            self.next_turn()
+            reject_count = 0
+            turn = complimented_index  
 
-        return False
+        wait()
+        line_print()
