@@ -47,7 +47,7 @@ def random_game_com(player):
     return random_index
 
 def random_game_player(player):
-    name = player[0]
+    name = player[0][0]
     while True:
         try: 
             game_index = int(input(f'{name}(이)가 좋아하는 랜덤 게임~ 랜덤 게임~ 무슨 게임? : '))
@@ -307,6 +307,10 @@ def main():
                     print(f'{player[0]}이(가) 전사했습니다... 꿈나라에서는 편히 쉬시길..zzz')
                     everyone_alive = False
                     break
+            
+            # 치사량 도달 시 랜덤게임 종료
+            if not everyone_alive:
+                break
 
     line_print()
     print('                     🍺 다음에 술마시면 또 불러주세요~ 안녕! 🍺')
