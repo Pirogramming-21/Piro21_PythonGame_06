@@ -1,6 +1,4 @@
 # players 사용하시면 list 정보가 있고
-
-
 # 마지막에 loser 리턴해야합니다
 import time
 import random
@@ -55,6 +53,7 @@ def game_5(players):
             if player == 0:
                 answer = ppang_player_input(ppang_list)
                 if answer != ppang_list[cnt]:
+                    print(f"{player_names[0]} 땡!")
                     return players[0]
 
                 player = player_point(player_names)
@@ -62,23 +61,58 @@ def game_5(players):
 
             # 컴퓨터 차례인 경우
             else:
-                #!!!!!!!!!!!!실패할 확률 추가하기
-                print(f"{player_names[player]}: {ppang_list[cnt]}")
-                player = random.randint(0, len(players) - 1)
-                print(f"{player_names[player]}을/를 가르켰습니다!")
-                cnt += 1
+                failure = random.randint(1, 100)
+                next_player = random.randint(0, len(players) - 1)
+
+                # 실패 확률 20%
+                if failure > 80:
+                    answer = random.choice(
+                        [x for x in ppang_list if x != ppang_list[cnt]]
+                    )
+                    print(f"{player_names[player]}: {answer}")
+                    print(f"{player_names[next_player]}을/를 가르켰습니다!")
+                    print(f"{player_names[player]} 땡!")
+                    return players[cnt]
+                # 성공 확률 80%
+                else:
+                    print(f"{player_names[player]}: {ppang_list[cnt]}")
+                    print(f"{player_names[next_player]}을/를 가르켰습니다!")
+                    cnt += 1
+                    player = next_player
 
         # 으악!
         right = (player + 1) % len(players)
         left = (player - 1 + len(players)) % len(players)
         scream = player_scream()
 
-        # 으악! 하면 안 되는데 으악! 했을 때
-        if scream and (right != 0 or left != 0):
-            return players[0]
+        # 으악!
+        if scream:
+            print(f"{player_names[0]}: 으악! ヽ༼⊙_⊙༽ﾉ")
+            # 내가 오른쪽이면?
+            if right == 0:
+                print(f"{player_names[left]}: 으악! ヽ༼⊙_⊙༽ﾉ")
+            # 내가 왼쪽이면?
+            elif left == 0:
+                print(f"{player_names[right]}: 으악! ヽ༼⊙_⊙༽ﾉ")
+            # 둘 다 아니면?
+            else:
+                print(f"{player_names[0]} 땡!")
+                return players[0]
 
-        print(f"{player_names[right]}: 으악! ヽ༼⊙_⊙༽ﾉ")
-        print(f"{player_names[left]}: 으악! ヽ༼⊙_⊙༽ﾉ")
+        else:
+            if right == 0 or left == 0:
+                print(f"{player_names[0]} 땡!")
+                return players[0]
+
+            failure = random.randint(1, 100)
+            ind = random.randint(0, 1)
+            if failure > 80:
+                if ind == 0:
+                    print(f"{player_names[left]}: 으악! ヽ༼⊙_⊙༽ﾉ")
+                    print(f"{player_names[left]} 땡!")
+                else:
+                    print(f"{player_names[right]}: 으악! ヽ༼⊙_⊙༽ﾉ")
+                    print(f"{player_names[right]} 땡!")
         cnt = 0
 
 
