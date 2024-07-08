@@ -192,8 +192,6 @@ def game_2(players):  # 좋아 게임
     turn = 0
     reject_count = 0
 
-    def next_turn(turn, players):
-        return (turn + 1) % len(players)
 
     while True:
         current_player = players[turn]
