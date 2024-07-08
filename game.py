@@ -3,10 +3,8 @@ def game_2(players):
     print('좋아 게임')
 
     turn = 0  
-    reject_count = 0  
+    reject_count = 0  # 캌 퉤를 받은 수
 
-    def next_turn(turn, players):
-        return (turn + 1) % len(players)
 
     while True:
         current_player = players[turn][0]  
