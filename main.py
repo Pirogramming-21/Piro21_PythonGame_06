@@ -731,8 +731,8 @@ def main():
 
             playing_game(game_index, players)
 
-            print("### TEST ### ")
-            print(players)
+            # print("### TEST ### ")
+            # print(players)
 
             current_status(players)
 
