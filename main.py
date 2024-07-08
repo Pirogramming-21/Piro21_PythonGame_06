@@ -273,7 +273,7 @@ def game_3(players):  # 고백점프
                 ).strip()
 
                 # 사용자가 고, 백, 점프 중 하나를 입력했는지 확인
-                if user_response not in ["고", "백", "점프"]:
+                if user_response not in ["고", "백", "점프","3","9","6","10","14"]:
                     print("다른거를 말해서 게임 아웃입니다ㅏ!!!.")
                     loser = gobacklist[current_index]
 
