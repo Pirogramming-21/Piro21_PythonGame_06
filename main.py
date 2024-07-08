@@ -2,6 +2,7 @@ import os
 import sys
 import random
 import time
+import copy
 
 players = []
 games = []
@@ -14,6 +15,7 @@ def wait():
 def line_print():
     columns, _ = os.get_terminal_size()  # 터미널 너비
     print("~" * columns)
+
 
 
 def drink_soju(loser, players):
@@ -79,10 +81,10 @@ def random_game_player(player):
 
 def ask_if_continue():
     if (
-        input(
-            '술게임 진행중! 다른 사람의 턴입니다. 그만하고 싶으면 "exit"를, 계속하고 싶으면 아무키나 입력해 주세요! : '
-        ).lower()
-        == "exit"
+            input(
+                '술게임 진행중! 다른 사람의 턴입니다. 그만하고 싶으면 "exit"를, 계속하고 싶으면 아무키나 입력해 주세요! : '
+            ).lower()
+            == "exit"
     ):
         print("게임을 종료합니다.")
         sys.exit()  # 전체 코드 강제종료
@@ -231,16 +233,17 @@ def game_2(players):  # 좋아 게임
         line_print()
 
 
-def game_3(players, user_name):  # 고백점프
+def game_3(players):  # 고백점프
     print("GAME START")
     print("고백점프")
+    gobacklist = copy.deepcopy(players)  # 깊은 복사
 
+    username=gobacklist[0][0]
     def contains_369(num):
-        """Check if a number contains 3, 6, or 9"""
         return any(d in "369" for d in str(num))
 
     def get_gobackjump_response(num):
-        """Get the correct response for a number containing 3, 6, or 9"""
+
         if num % 3 == 0:
             return "고"
         elif num % 6 == 0:
@@ -250,21 +253,21 @@ def game_3(players, user_name):  # 고백점프
 
     def next_player(current_index, step=1):
 
-        return (current_index + step) % len(players)
+        return (current_index + step) % len(gobacklist)
 
-    # Find the index of the user_name in players
+
     current_index = next(
-        i for i, player in enumerate(players) if player[0] == user_name
+        i for i, player in enumerate(gobacklist) if player[0] == username
     )
     count = 1
 
     while True:
-        current_player = players[current_index][0]
+        current_player = gobacklist[current_index][0]
         print(f"{current_player}의 차례입니다! ({count})")
         computer_response = ""
         if contains_369(count):
             correct_response = get_gobackjump_response(count)
-            if current_player == user_name:
+            if current_player == username:
                 user_response = input(
                     f"{count}에는 뭐라고 대답해야 할까요? (고/백/점프): "
                 ).strip()
@@ -272,13 +275,13 @@ def game_3(players, user_name):  # 고백점프
                 # 사용자가 고, 백, 점프 중 하나를 입력했는지 확인
                 if user_response not in ["고", "백", "점프"]:
                     print("다른거를 말해서 게임 아웃입니다ㅏ!!!.")
-                    loser = players[current_index]
+                    loser = gobacklist[current_index]
 
                     return loser  # 게임 종료: 잘못된 입력
 
             else:
                 # 컴퓨터 플레이어의 임의 응답
-                responses = ["고", "백", "점프", "3", "9", "11", "6", "15"]
+                responses = ["고", "백", "점프"]
                 computer_response = random.choice(responses)
                 print(f"{current_player}이(가) {computer_response}이라고 대답했습니다.")
                 a = current_player
@@ -286,20 +289,20 @@ def game_3(players, user_name):  # 고백점프
                     print(
                         f"오답입니다! {a}이(가) {correct_response} 대신 {computer_response}이라고 했습니다."
                     )
-                    loser = players[current_index]
+                    loser = gobacklist[current_index]
                     return loser  # 게임 종료
 
             # 다음 플레이어 결정
             if computer_response == "고" or user_response == "고":
                 current_index = next_player(current_index)
             elif computer_response == "백" or user_response == "백":
-                players.reverse()
+                gobacklist.reverse()
                 current_index = next_player(current_index - 1)
 
             elif computer_response == "점프" or user_response == "점프":
                 current_index = next_player(current_index, 2)
         else:
-            if current_player == user_name:
+            if current_player == username:
                 user_response = input(
                     f"{current_player}, 답을(를) 외쳐주세요: "
                 ).strip()
@@ -308,7 +311,7 @@ def game_3(players, user_name):  # 고백점프
                     print(
                         f"오답입니다! {a}이(가) {count} 대신 {user_response}이라고 했습니다."
                     )
-                    loser = players[current_index]
+                    loser = gobacklist[current_index]
                     return loser  # 게임 종료
             else:
                 print(f"{current_player}이(가) {count}을(를) 외쳤습니다!")
@@ -321,8 +324,8 @@ def game_3(players, user_name):  # 고백점프
         print(
             "현재 순서:",
             " -> ".join(
-                player[0]
-                for player in players[current_index:] + players[:current_index]
+                gobacklist[0]
+                for gobacklist in gobacklist[current_index:] + gobacklist[:current_index]
             ),
         )
 
@@ -567,10 +570,8 @@ def playing_game(game_index, players):
     line_print()
     wait()
     game_to_play = games[game_index - 1]
-    if game_index == 3:  # game_3는 인자가 필요함
-        game_loser = game_to_play(players, players[0][0])
-    else:
-        game_loser = game_to_play(players)
+
+    game_loser = game_to_play(players)
 
     print(f"아 누가누가 술을 마셔😮 {game_loser[0]}이(가) 술을 마셔😖 원~~~샷✨✨")
     drink_soju(game_loser, players)
@@ -587,13 +588,13 @@ def main():
 \ \  __ \  \ \ \____  \ \ \____  \ \ \/\ \  \ \  __ \  \ \ \/\ \  \ \ \____  
  \ \_\ \_\  \ \_____\  \ \_____\  \ \_____\  \ \_\ \_\  \ \_____\  \ \_____\ 
   \/_/\/_/   \/_____/   \/_____/   \/_____/   \/_/\/_/   \/_____/   \/_____/ 
-                                                                            
+
                 ______     ______     __    __     ______                                
                /\  ___\   /\  __ \   /\ "-./  \   /\  ___\                               
                \ \ \__ \  \ \  __ \  \ \ \-./\ \  \ \  __\                               
                 \ \_____\  \ \_\ \_\  \ \_\ \ \_\  \ \_____\                             
                  \/_____/   \/_/\/_/   \/_/  \/_/   \/_____/                             
-                                                                                                                                                                
+
     """
     )
     line_print()
@@ -743,14 +744,14 @@ def main():
                         """
     ----------------------------------------------------------------------------------
 
-                        
+
         ██████╗  █████╗ ███╗   ███╗███████╗     ██████╗ ██╗   ██╗███████╗██████╗ 
         ██╔════╝ ██╔══██╗████╗ ████║██╔════╝    ██╔═══██╗██║   ██║██╔════╝██╔══██╗
         ██║  ███╗███████║██╔████╔██║█████╗      ██║   ██║██║   ██║█████╗  ██████╔╝
         ██║   ██║██╔══██║██║╚██╔╝██║██╔══╝      ██║   ██║╚██╗ ██╔╝██╔══╝  ██╔══██╗
         ╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗    ╚██████╔╝ ╚████╔╝ ███████╗██║  ██║
         ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝     ╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═╝
-                        
+
 
     ----------------------------------------------------------------------------------"""
                     )
